@@ -13,6 +13,12 @@ function drawDot(ctx, x, y) {
     ctx.arc(x,y, size, 0, Math.PI*2, true);
     ctx.closePath();
     ctx.fill();
+
+
+    var pctX = x / ctx.canvas.width;
+    var pctY = y / ctx.canvas.height;
+    var pctSize = size / ctx.canvas.width;
+    sendDrawEvent(pctX, pctY, pctSize);
 }
 
 // handle mouse movement
@@ -37,3 +43,14 @@ function mouseMove(e) {
 c.addEventListener('mousedown', mouseDown, false);
 c.addEventListener('mousemove', mouseMove, false);
 c.addEventListener('mouseup', mouseUp, false);
+
+// socket io
+var socket = io.connect('http://' + document.domain + ':' + location.port);
+function sendDrawEvent(pctX,pctY,pctSize) {
+    //socket.on('connect', function() {
+    //    console.log('connected');
+    //    socket.emit('message', 'woah');
+    //});
+
+    socket.emit('drawEvent', [pctX,pctY,pctSize]);
+}
