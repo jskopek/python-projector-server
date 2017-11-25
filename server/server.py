@@ -31,19 +31,30 @@ class Painter(object):
         mainloop()
 
 
-def socketServerMessageReceived(client, server, message):
-    data = json.loads(message)
-    logging.debug('socketServerMessageReceived with contents: %s' % message)
-    painter.draw_oval(pctX=data[0], pctY=data[1], pctSize=data[2])
+class SocketServer(object):
+    def __init__(self, draw_callback, port=5002, **kwargs):
+        self.port = port
+        self.server = WebsocketServer(self.port)
+        self.server.set_fn_message_received(self.message_received)
 
-def socketServer():
-    server = WebsocketServer(5002)
-    server.set_fn_message_received(socketServerMessageReceived)
-    server.run_forever()
+        self.draw_callback = draw_callback
 
-t = threading.Thread(name='socketServer', target=socketServer)
-t.setDaemon(True)
-t.start()
+    def message_received(self, client, server, message):
+        data = json.loads(message)
+        logging.debug('message_received with contents: %s' % message)
+        self.draw_callback(pctX=data[0], pctY=data[1], pctSize=data[2])
+
+    def start(self):
+        self.server.run_forever()
+
 
 painter = Painter()
+
+# initialize a threaded socket server that calls painter draw_oval on event
+server = SocketServer(draw_callback=painter.draw_oval)
+threaded_server = threading.Thread(name='socketServer', target=server.start)
+threaded_server.setDaemon(True)
+threaded_server.start()
+
+# start the main tkinter loop
 painter.start()
