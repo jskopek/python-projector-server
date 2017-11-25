@@ -57,7 +57,8 @@ c.addEventListener('mouseup', mouseUp, false);
 //    socket.emit('drawEvent', [pctX,pctY,pctSize]);
 //}
 
-var connection = new WebSocket('ws://127.0.0.1:5002');
+var address = document.location.hostname;
+var connection = new WebSocket('ws://' + address + ':5002');
 connection.onopen = function() {
     console.log('connection opened')
 }

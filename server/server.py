@@ -34,7 +34,7 @@ class Painter(object):
 class SocketServer(object):
     def __init__(self, draw_callback, port=5002, **kwargs):
         self.port = port
-        self.server = WebsocketServer(self.port)
+        self.server = WebsocketServer(host='0.0.0.0', port=self.port)
         self.server.set_fn_message_received(self.message_received)
 
         self.draw_callback = draw_callback
