@@ -24,6 +24,7 @@ class Painter(object):
         oX2 = oX1 + (self.width * pctSize)
         oY2 = oY1 + (self.width * pctSize)
 
+        logging.debug('drawOval: Start')
         self.canvas.create_oval(oX1, oY1, oX2, oY2, fill='#000')
         logging.debug('drawOval: Create Oval: oX1=%s oY1=%s oX2=%s oY2=%s' % (oX1, oY1, oX2, oY2))
 
@@ -41,7 +42,7 @@ class SocketServer(object):
 
     def message_received(self, client, server, message):
         data = json.loads(message)
-        logging.debug('message_received with contents: %s' % message)
+        logging.debug('message_received with id: %d' % data[3])
         self.draw_callback(pctX=data[0], pctY=data[1], pctSize=data[2])
 
     def start(self):
