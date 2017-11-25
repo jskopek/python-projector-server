@@ -44,13 +44,23 @@ c.addEventListener('mousedown', mouseDown, false);
 c.addEventListener('mousemove', mouseMove, false);
 c.addEventListener('mouseup', mouseUp, false);
 
-// socket io
-var socket = io.connect('http://' + document.domain + ':' + location.port);
-function sendDrawEvent(pctX,pctY,pctSize) {
-    //socket.on('connect', function() {
-    //    console.log('connected');
-    //    socket.emit('message', 'woah');
-    //});
+//// socket io
+//var port = location.port;
+//var port = 5001;
+//var socket = io.connect('http://' + document.domain + ':' + port);
+//function sendDrawEvent(pctX,pctY,pctSize) {
+//    //socket.on('connect', function() {
+//    //    console.log('connected');
+//    //    socket.emit('message', 'woah');
+//    //});
+//
+//    socket.emit('drawEvent', [pctX,pctY,pctSize]);
+//}
 
-    socket.emit('drawEvent', [pctX,pctY,pctSize]);
+var connection = new WebSocket('ws://127.0.0.1:5002');
+connection.onopen = function() {
+    console.log('connection opened')
+}
+function sendDrawEvent(pctX, pctY, pctSize) {
+    connection.send(JSON.stringify([pctX, pctY, pctSize]));
 }
