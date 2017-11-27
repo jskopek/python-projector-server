@@ -2,7 +2,19 @@
 <head>
 </head>
 <body style='margin: 0;'>
+    <input type='text' id="color" />
+    <select id='size'>
+        <option value='5'>small</option>
+        <option value='15'>medium</option>
+        <option value='25'>large</option>
+        <option value='50'>massive</option>
+        <option value='300'>planet-sized</option>
+    </select>
+
     <canvas id='draw'></canvas>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
     <script type="text/javascript" src="main.js"></script>
 </body>

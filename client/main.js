@@ -6,8 +6,9 @@ ctx.canvas.height = window.innerHeight;
 
 
 function drawDot(ctx, x, y) {
-    var size = 15;
-    ctx.fillStyle = 'rgba(0,0,0,1)';
+    var size = parseInt(document.getElementById('size').value);
+    var color = document.getElementById('color').value;
+    ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(x,y, size, 0, Math.PI*2, true);
     ctx.closePath();
@@ -17,7 +18,7 @@ function drawDot(ctx, x, y) {
     var pctX = x / ctx.canvas.width;
     var pctY = y / ctx.canvas.height;
     var pctSize = size / ctx.canvas.width;
-    sendDrawEvent(pctX, pctY, pctSize);
+    sendDrawEvent(pctX, pctY, pctSize, color);
 }
 
 // handle mouse movement
@@ -47,8 +48,16 @@ connection.onopen = function() {
     console.log('connection opened')
 }
 var msgId = 0
-function sendDrawEvent(pctX, pctY, pctSize) {
-    connection.send(JSON.stringify([pctX, pctY, pctSize, msgId]));
-    console.log('drawEvent sent with ID:', msgId);
+function sendDrawEvent(pctX, pctY, pctSize, color) {
+    var rgbColorComponents = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    var msgColor = rgbColorComponents ? [rgbColorComponents[1],rgbColorComponents[2],rgbColorComponents[3]] : '';
+    connection.send(JSON.stringify([pctX, pctY, pctSize, msgColor, msgId]));
+    console.log('drawEvent sent with ID:', msgId, [pctX, pctY, pctSize, msgColor, msgId]);
     msgId++;
 }
+
+$("#color").spectrum({
+    flat: true,
+    preferredFormat: "rgb",
+    showInput: true
+});
